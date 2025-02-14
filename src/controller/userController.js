@@ -8,7 +8,7 @@ const UserSchema=z.object({
     password: z.string().min(8),
     fullName: z.string().min(3).max(15),
     gender:z.enum(["Male", "Female", 'Other']),
-    dateOfBirth: z.preprocess((val) => new Date(val), z.date()),
+    dateOfBirth: z.date(),
     country:z.string().min(3).max(15)
 })
 const LoginSchema=z.object({
@@ -16,7 +16,8 @@ const LoginSchema=z.object({
     password: z.string().min(8)
 });
 const Register=async(req,res)=>{
-    const{username,email,password,fullName,gender,dateOfBirth,country}=req.body;
+    let{username,email,password,fullName,gender,dateOfBirth,country}=req.body;
+    dateOfBirth=new Date(dateOfBirth);
     const data= UserSchema.safeParse({username,email,password,fullName,gender,dateOfBirth,country});
     if(data.success){
         try{
